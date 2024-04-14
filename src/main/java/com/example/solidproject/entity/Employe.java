@@ -15,9 +15,17 @@ public class Employe {
     public Employe(){
         id=++nbreEmployes;
     }
+    
 
     public int calculerRenumeration(){
         throw new RuntimeException("Not Found");
+    }
+
+    public String toString(){
+        return "Employe{" +
+                "id=" + id +
+                ", matricule='" + matricule + '\'' +
+                ", etat=" + etat;
     }
 
 }

@@ -2,7 +2,13 @@ package com.example.solidproject;
 
 import com.example.solidproject.entity.*;
 import com.example.solidproject.enums.ContractType;
+import com.example.solidproject.service.EmployeService;
 import com.example.solidproject.service.ServiceService;
+import com.example.solidproject.service.virement.Virement;
+import com.example.solidproject.service.virement.VirementBancaire;
+import com.example.solidproject.service.virement.VirementOM;
+import com.example.solidproject.service.virement.VirementWave;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,6 +21,7 @@ public class SolidProjectApplication {
 		SpringApplication.run(SolidProjectApplication.class, args);
 
 		ServiceService serviceService = new ServiceService();
+		EmployeService employeService = new EmployeService();
 		Scanner scanner=new Scanner(System.in);
 		int choix;
 
@@ -34,6 +41,7 @@ public class SolidProjectApplication {
 					System.out.println("----------------------------------");
 					System.out.println("Liste des services");
 					serviceService.getAll().forEach(System.out::println);
+					break;
 				case 2:
 					Employe employe = null;
 					System.out.println("Veuillez choisir le type d'employé");
@@ -48,9 +56,15 @@ public class SolidProjectApplication {
 							((Journalier) employe).setCoutJ(scanner.nextInt());
 							System.out.println("Veuillez Entrer le nombre d'heures de l'employé");
 							((Journalier) employe).setNbreJours(scanner.nextInt());
+							employeService.add(employe);
+							System.out.println("----------------------------------");
+							System.out.println("Liste des employés");
+							employeService.getAll().forEach(System.out::println);
+							break;
 						case 2:
 							employe = new Contractuel();
 							System.out.println("Veuillez entrer le code du service");
+							scanner.nextLine();
 							String codeService = scanner.nextLine();
 							Service s = serviceService.getByCode(codeService);
 							if(s==null){
@@ -66,14 +80,48 @@ public class SolidProjectApplication {
 									System.out.println("Type de contrat introuvable");
 								}
 							}
+							employeService.add(employe);
+							System.out.println("----------------------------------");
+							System.out.println("Liste des employés");
+							employeService.getAll().forEach(System.out::println);
+							break;
 						case 3:
 							employe = new Prestataire();
 							System.out.println("Veuillez entrer la période de service");
 							((Prestataire) employe).setCoutService(scanner.nextInt());
 							System.out.println("Veuillez entrer le cout de service");
 							((Prestataire) employe).setPeriodeService(scanner.nextInt());
+							employeService.add(employe);
+							System.out.println("----------------------------------");
+							System.out.println("Liste des employés");
+							employeService.getAll().forEach(System.out::println);
+							break;
 
 					}
+					break;
+				case 3:
+					System.out.println("Veuillez entrer le matricule de l'employé");
+					String matEmploye = scanner.nextLine();
+					Employe e = employeService.getByMatricule(matEmploye);
+					if (e==null){
+						System.out.println("Employé introuvable");
+						break;
+					}
+					System.out.println("Veuillez choisir la méthode de virement");
+					System.out.println("1-Virement bancaire");
+					System.out.println("2-Wave");
+					System.out.println("3-Orange Money");
+					int moyen = scanner.nextInt();
+					Virement virement = null;
+					if(moyen==1){
+						virement = new VirementBancaire();
+					}else if(moyen==2){
+						virement = new VirementWave();
+					}else if(moyen==3){
+						virement = new VirementOM();
+					}
+					employeService.virerSalaire(e,virement);
+					
 			}
 
 		}while (choix!=5);

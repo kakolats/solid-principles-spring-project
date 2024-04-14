@@ -13,4 +13,11 @@ public class Prestataire extends Employe{
     public int calculerRenumeration() {
         return periodeService*coutService;
     }
+
+    public String toString(){
+        return super.toString() + ", Prestataire{" +
+                "periodeService=" + periodeService +
+                ", coutService=" + coutService +
+                '}';
+    }
 }

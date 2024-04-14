@@ -15,4 +15,12 @@ public class Journalier extends Employe{
         salaire = coutJ*nbreJours;
         return salaire;
     }
+
+    public String toString(){
+        return super.toString() + ", Journalier{" +
+                "coutJ=" + coutJ +
+                ", nbreJours=" + nbreJours +
+                ", salaire=" + salaire +
+                '}';
+    }
 }

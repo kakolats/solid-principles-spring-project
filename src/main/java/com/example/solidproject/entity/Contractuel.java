@@ -19,4 +19,15 @@ public class Contractuel extends Employe{
     public int calculerRenumeration() {
         return salaireBrut+prime-retenue;
     }
+
+    public String toString(){
+        return super.toString() + ", Contractuel{" +
+                "prime=" + prime +
+                ", retenue=" + retenue +
+                ", salaireBrut=" + salaireBrut +
+                ", salaireNet=" + salaireNet +
+                ", service=" + service.getNom() +
+                ", contractType=" + contractType +
+                '}';
+    }
 }
