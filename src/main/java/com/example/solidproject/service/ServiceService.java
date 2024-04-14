@@ -1,12 +1,13 @@
 package com.example.solidproject.service;
 
 import com.example.solidproject.entity.Service;
-import com.example.solidproject.repository.list.ServiceRepository;
+import com.example.solidproject.repository.interfaces.IServiceRepository;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-
+@RequiredArgsConstructor
 public class ServiceService {
-    ServiceRepository serviceRepository = new ServiceRepository();
+    private final IServiceRepository serviceRepository;
 
     public Service getByCode(String code){
         return serviceRepository.findByCode(code);

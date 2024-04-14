@@ -2,6 +2,10 @@ package com.example.solidproject;
 
 import com.example.solidproject.entity.*;
 import com.example.solidproject.enums.ContractType;
+import com.example.solidproject.repository.interfaces.IEmployeRepository;
+import com.example.solidproject.repository.interfaces.IServiceRepository;
+import com.example.solidproject.repository.list.EmployeRepository;
+import com.example.solidproject.repository.list.ServiceRepository;
 import com.example.solidproject.service.EmployeService;
 import com.example.solidproject.service.ServiceService;
 import com.example.solidproject.service.virement.Virement;
@@ -19,15 +23,16 @@ public class SolidProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SolidProjectApplication.class, args);
-
-		ServiceService serviceService = new ServiceService();
-		EmployeService employeService = new EmployeService();
+		IServiceRepository serviceRepository = new ServiceRepository();
+		IEmployeRepository employeRepository = new EmployeRepository();
+		ServiceService serviceService = new ServiceService(serviceRepository);
+		EmployeService employeService = new EmployeService(employeRepository);
 		Scanner scanner=new Scanner(System.in);
 		int choix;
 
 		do{
-			System.out.println("1-Enregister un service dans une liste");
-			System.out.println("2-Enregister un employé dans une liste");
+			System.out.println("1-Enregister un service");
+			System.out.println("2-Enregister un employé");
 			System.out.println("3-Virer un salaire");
 			System.out.println("4-Enregistrer un congé pour un employé");
 			choix = scanner.nextInt();
@@ -56,6 +61,7 @@ public class SolidProjectApplication {
 							((Journalier) employe).setCoutJ(scanner.nextInt());
 							System.out.println("Veuillez Entrer le nombre d'heures de l'employé");
 							((Journalier) employe).setNbreJours(scanner.nextInt());
+							
 							employeService.add(employe);
 							System.out.println("----------------------------------");
 							System.out.println("Liste des employés");
@@ -63,6 +69,12 @@ public class SolidProjectApplication {
 							break;
 						case 2:
 							employe = new Contractuel();
+							System.out.println("Veuillez entrer le salaire brut de l'employé");
+							((Contractuel) employe).setSalaireBrut(scanner.nextInt());
+							System.out.println("Veuillez entrer la retenue de l'employé");
+							((Contractuel) employe).setRetenue(scanner.nextInt());
+							//La prime est 10 % du salaire net
+							((Contractuel) employe).setPrime(((Contractuel) employe).getSalaireBrut()*10/100);
 							System.out.println("Veuillez entrer le code du service");
 							scanner.nextLine();
 							String codeService = scanner.nextLine();
@@ -80,6 +92,7 @@ public class SolidProjectApplication {
 									System.out.println("Type de contrat introuvable");
 								}
 							}
+							((Contractuel) employe).setService(s);
 							employeService.add(employe);
 							System.out.println("----------------------------------");
 							System.out.println("Liste des employés");
@@ -121,7 +134,11 @@ public class SolidProjectApplication {
 						virement = new VirementOM();
 					}
 					employeService.virerSalaire(e,virement);
-					
+					break;
+				case 4:
+					System.out.println("Veuillez entrer le matricule de l'employé");
+					String mat = scanner.nextLine();
+					Employe employe1 = employeService.getByMatricule(mat);
 			}
 
 		}while (choix!=5);
