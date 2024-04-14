@@ -21,6 +21,10 @@ public class Employe {
         throw new RuntimeException("Not Found");
     }
 
+    public void changerEtat(Etat etat){
+        this.etat = etat;
+    }
+
     public String toString(){
         return "Employe{" +
                 "id=" + id +

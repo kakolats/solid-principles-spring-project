@@ -2,6 +2,7 @@ package com.example.solidproject;
 
 import com.example.solidproject.entity.*;
 import com.example.solidproject.enums.ContractType;
+import com.example.solidproject.enums.Etat;
 import com.example.solidproject.repository.interfaces.IEmployeRepository;
 import com.example.solidproject.repository.interfaces.IServiceRepository;
 import com.example.solidproject.repository.list.EmployeRepository;
@@ -139,6 +140,13 @@ public class SolidProjectApplication {
 					System.out.println("Veuillez entrer le matricule de l'employé");
 					String mat = scanner.nextLine();
 					Employe employe1 = employeService.getByMatricule(mat);
+					if (employe1==null){
+						System.out.println("Employé introuvable");
+						break;
+					}
+					employe1.changerEtat(Etat.getValue(1));
+					System.out.println("Congé enregistré avec succès");
+					employe1.toString();
 			}
 
 		}while (choix!=5);
