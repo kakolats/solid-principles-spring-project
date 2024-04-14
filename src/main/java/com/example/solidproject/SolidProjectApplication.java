@@ -146,7 +146,7 @@ public class SolidProjectApplication {
 					}
 					employe1.changerEtat(Etat.getValue(1));
 					System.out.println("Congé enregistré avec succès");
-					employe1.toString();
+					System.out.println(employe1.toString());
 			}
 
 		}while (choix!=5);
